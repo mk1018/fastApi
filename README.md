@@ -8,7 +8,7 @@ https://zenn.dev/sh0nk/books/537bb028709ab9/viewer/96a124
 
 ### .envを作成
 ```
-cp .env.example
+cp .env.example .env
 ```
 
 ### コンテナ起動
