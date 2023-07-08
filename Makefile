@@ -10,3 +10,5 @@ shel:
 	docker-compose exec python bash
 start-serve:
 	docker-compose exec -d python bash -c "uvicorn main:app --reload --host 0.0.0.0 --port 8080"
+migrate:
+	docker-compose exec python python -m migrations
