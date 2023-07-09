@@ -1,3 +1,4 @@
 .env
 db-store
 __pycache__
+.pytest_cache

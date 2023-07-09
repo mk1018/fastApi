@@ -1,10 +1,10 @@
 from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from schemas.task import Task, TaskCreate, TaskCreateResponse
+from app.schemas.task import Task, TaskCreate, TaskCreateResponse
 
-import cruds.task as task_crud
-from db import get_db
+import app.cruds.task as task_crud
+from app.db import get_db
 
 router = APIRouter()
 
