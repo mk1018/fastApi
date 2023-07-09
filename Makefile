@@ -1,3 +1,7 @@
+APP_CONTAINER_NAME=python
+DB_CONTAINER_NAME=mysql
+
+# container
 build:
 	docker-compose build
 up:
@@ -6,15 +10,17 @@ down:
 	docker-compose down
 
 # app
-freeze:
-	docker-compose exec python pip freeze > app/requirements.txt
 shel:
-	docker-compose exec python bash
+	docker-compose exec $(APP_CONTAINER_NAME) bash
+freeze:
+	docker-compose exec $(APP_CONTAINER_NAME) pip freeze > src/requirements.txt
 start-serve:
-	docker-compose exec python bash -c "uvicorn app.main:app --reload --host 0.0.0.0 --port 8080"
+	docker-compose exec $(APP_CONTAINER_NAME) bash -c "uvicorn app.main:app --reload --host 0.0.0.0 --port 8080"
 migrate:
-	docker-compose exec python python -m migrations
+	docker-compose exec $(APP_CONTAINER_NAME) python -m migrations
+test:
+	docker-compose exec $(APP_CONTAINER_NAME) pytest -v --disable-warnings
 
 # db
 db-shel:
-	docker-compose exec mysql mysql -umy_user -p sample
+	docker-compose exec $(DB_CONTAINER_NAME) mysql -umy_user -p sample
