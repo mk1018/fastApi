@@ -22,6 +22,6 @@ async def create_task(
 async def update_task(task_id: int, task_body: TaskCreate):
     return TaskCreateResponse(id=task_id, **task_body.dict())
 
-@router.delete("/tasks/{task_id}", response_model=None)
+@router.delete("/tasks/{task_id}", response_model=int)
 async def delete_task(task_id: int):
-    return
+    return task_id
