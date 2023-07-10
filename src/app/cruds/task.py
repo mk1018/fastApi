@@ -19,7 +19,7 @@ async def delete_task(db: DbAsyncSession, task: task_model.Task) -> None:
     db.commit()
 
 async def get_task(db: DbAsyncSession, task_id: int) -> task_model.Task | None:
-    result: Result = db.execute(
+    result: Result = await db.execute(
         select(task_model.Task).filter(task_model.Task.id == task_id)
     )
 
