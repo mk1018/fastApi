@@ -1,5 +1,3 @@
-from typing import List, Tuple
-
 from sqlalchemy import select
 from sqlalchemy.engine import Result
 
@@ -16,7 +14,25 @@ async def create_task(
     await db.refresh(task)
     return task
 
-async def get_tasks_with_done(db: DbAsyncSession) -> List[Tuple[int, str, bool]]:
+async def delete_task(db: DbAsyncSession, task: task_model.Task) -> None:
+    db.delete(task)
+    db.commit()
+
+async def get_task(db: DbAsyncSession, task_id: int) -> task_model.Task | None:
+    result: Result = db.execute(
+        select(task_model.Task).filter(task_model.Task.id == task_id)
+    )
+
+    return result.scalars().first()
+
+async def update_task(db: DbAsyncSession, task_create: task_schema.TaskCreate, task: task_model.Task):
+    task.title = task_create.title
+    db.add(task)
+    db.commit()
+    db.refresh(task)
+    return task
+
+async def get_tasks_with_done(db: DbAsyncSession) -> list[task_schema.Task]:
     result: Result = await (
         db.execute(
             select(
@@ -26,4 +42,5 @@ async def get_tasks_with_done(db: DbAsyncSession) -> List[Tuple[int, str, bool]]
             ).outerjoin(task_model.Done)
         )
     )
+
     return result.all()
