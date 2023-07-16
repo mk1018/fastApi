@@ -58,7 +58,7 @@ class OpenAIResponse(BaseModel):
         return self._response
 
 async def asend(model: Model, messages: OpenAIMessages, stream: bool=True) -> OpenAIResponse:
-    response = openai.ChatCompletion.acreate(
+    response = await openai.ChatCompletion.acreate(
         api_key=messages.api_key(),
         model=model.value,
         messages=messages.to_dict(),
