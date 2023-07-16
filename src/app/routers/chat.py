@@ -9,6 +9,6 @@ router = APIRouter()
 
 @router.post("/chats")
 async def chat(chat_input: ChatInput, db: DbAsyncSession = Depends(get_db)):
-    response_stream: OpenAIResponse = await schat.chat(chat_input.prompt)
+    response_stream: OpenAIResponse = await schat.chat(chat_input.get_prompt())
     # TODO: dbへ保存
     return StreamingResponse(response_stream.generate_response_stream())
