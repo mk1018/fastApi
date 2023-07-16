@@ -1,2 +1,2 @@
 from app.routers import app
-from app.config.db import ASYNC_DB_URL
+from app.config.db import async_db_url

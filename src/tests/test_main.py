@@ -7,12 +7,12 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
 from app.db import get_db, Base
-from app.main import app, ASYNC_DB_URL
+from app.main import app, async_db_url
 
 @pytest_asyncio.fixture
 async def async_client() -> AsyncClient:
     # Async用のengineとsessionを作成
-    async_engine = create_async_engine(ASYNC_DB_URL, echo=True)
+    async_engine = create_async_engine(async_db_url(), echo=True)
     async_session = sessionmaker(
         autocommit=False, autoflush=False, bind=async_engine, class_=AsyncSession
     )
