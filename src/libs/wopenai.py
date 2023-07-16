@@ -5,7 +5,7 @@ from pydantic import BaseModel
 HYPER_PARAMETERS = {
     "temperature": 0.7,
     # "max_tokens": 60,
-    "top_k": 40,
+    # "top_k": 40,
     "top_p": 0.9,
     "length_penalty": 1.0,
     # "frequency_penalty": 0.5,
@@ -36,7 +36,7 @@ class OpenAIMessages(BaseModel):
     _messages: list[OpenAIMessage]
     _api_key: str
 
-    def set_api_key(self, api_key: str):
+    def __init__(self, api_key: str):
         self._api_key = api_key
 
     def api_key(self):
