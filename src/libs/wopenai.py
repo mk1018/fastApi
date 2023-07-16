@@ -25,7 +25,7 @@ class OpenAIMessage(BaseModel):
     role: Role
     content: str
 
-    def set_message(self, role: Role, content: str) -> None:
+    def __init__(self, role: Role, content: str) -> None:
         self.role = role
         self.content = content
 
