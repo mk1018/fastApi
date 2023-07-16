@@ -1,21 +1,21 @@
 from libs.env import system_openai_api_key
-import libs.wopenai as openai
+import libs.wopenai as wopenai
 
-async def chat(prompt: str) -> openai.OpenAIResponse:
-    messages = openai.OpenAIMessages(system_openai_api_key(), openai.Model.GPT_35_TURBO)
+async def chat(prompt: str) -> wopenai.OpenAIResponse:
+    messages = wopenai.OpenAIMessages(system_openai_api_key(), wopenai.Model.GPT_35_TURBO)
 
     messages.add_message(
-        openai.OpenAIMessage(
-            role=openai.Role.SYSTEM,
+        wopenai.OpenAIMessage(
+            role=wopenai.Role.SYSTEM,
             content="test"
         )
     )
 
     messages.add_message(
-        openai.OpenAIMessage(
-            role=openai.Role.USER,
+        wopenai.OpenAIMessage(
+            role=wopenai.Role.USER,
             content=prompt
         )
     )
 
-    return await openai.asend(messages)
+    return await wopenai.asend(messages)

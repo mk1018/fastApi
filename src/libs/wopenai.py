@@ -1,7 +1,6 @@
 import openai, json
 from enum import Enum
-from pydantic import BaseModel
-from typing import Optional, Any
+from typing import Any, AsyncGenerator
 
 HYPER_PARAMETERS = {
     "temperature": 0.7,
@@ -56,17 +55,14 @@ class OpenAIMessages():
         return [msg.message() for msg in self._messages]
 
 class OpenAIResponse():
-    response: list[Any]
+    _response: list[Any]
 
     def __init__(self, response) -> None:
-        self.response = response 
-
-    def get_response(self):
-        return self.response
+        self._response = response 
     
-    async def generate_response_stream(self):
-        async for chunk in self.get_response():
-            yield json.dumps(chunk) + "\n"
+    async def generate_response_stream(self) -> AsyncGenerator[str, None]:
+        async for chunk in self._response:
+            yield json.dumps(chunk)
     
 async def asend(messages: OpenAIMessages, stream: bool=True) -> OpenAIResponse:
     response = await openai.ChatCompletion.acreate(
