@@ -1,6 +1,7 @@
-import openai
+import openai, json
 from enum import Enum
 from pydantic import BaseModel
+from typing import Optional, Any
 
 HYPER_PARAMETERS = {
     "temperature": 0.7,
@@ -21,7 +22,7 @@ class Role(Enum):
     SYSTEM = "system"
     USER = "user"
 
-class OpenAIMessage(BaseModel):
+class OpenAIMessage():
     role: Role
     content: str
 
@@ -32,35 +33,45 @@ class OpenAIMessage(BaseModel):
     def message(self) -> dict[str, str]:
         return {"role": self.role.value, "content": self.content}
     
-class OpenAIMessages(BaseModel):
+class OpenAIMessages():
     _messages: list[OpenAIMessage]
+    _model: Model
     _api_key: str
 
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str, model: Model):
+        self._messages = []
+        self._model = model
         self._api_key = api_key
 
-    def api_key(self):
+    def api_key(self) -> str:
         return self._api_key
+    
+    def model(self) -> str:
+        return self._model.value
 
-    def add_message(self, message: OpenAIMessage):
+    def add_message(self, message: OpenAIMessage) -> None:
         self._messages.append(message)
 
     def to_dict(self) -> list[dict[str, str]]:
         return [msg.message() for msg in self._messages]
-    
-class OpenAIResponse(BaseModel):
-    _response: any
+
+class OpenAIResponse():
+    response: list[Any]
 
     def __init__(self, response) -> None:
-        self._response = response 
+        self.response = response 
 
-    def response(self) -> any:
-        return self._response
-
-async def asend(model: Model, messages: OpenAIMessages, stream: bool=True) -> OpenAIResponse:
+    def get_response(self):
+        return self.response
+    
+    async def generate_response_stream(self):
+        async for chunk in self.get_response():
+            yield json.dumps(chunk) + "\n"
+    
+async def asend(messages: OpenAIMessages, stream: bool=True) -> OpenAIResponse:
     response = await openai.ChatCompletion.acreate(
         api_key=messages.api_key(),
-        model=model.value,
+        model=messages.model(),
         messages=messages.to_dict(),
         stream=stream,
         top_p=HYPER_PARAMETERS['top_p'],

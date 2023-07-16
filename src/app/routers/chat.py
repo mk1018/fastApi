@@ -1,11 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException
-import app.schemas.task as task_schema
-
-import app.cruds.task as task_crud
+from fastapi import APIRouter, Depends
+from fastapi.responses import StreamingResponse
 from app.db import get_db, DbAsyncSession
+from libs.wopenai import OpenAIResponse
+from app.schemas.chat import ChatInput
+import services.chat as schat
 
 router = APIRouter()
 
-@router.get("/chats", response_model=list[task_schema.Task])
-async def chat(db: DbAsyncSession = Depends(get_db)):
-    return await task_crud.get_tasks_with_done(db)
+@router.post("/chats")
+async def chat(chat_input: ChatInput, db: DbAsyncSession = Depends(get_db)):
+    response_stream: OpenAIResponse = await schat.chat(chat_input.prompt)
+    # TODO: dbへ保存
+    return StreamingResponse(response_stream.generate_response_stream())

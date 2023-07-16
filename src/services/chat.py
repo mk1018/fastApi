@@ -2,7 +2,7 @@ from libs.env import system_openai_api_key
 import libs.wopenai as openai
 
 async def chat(prompt: str) -> openai.OpenAIResponse:
-    messages = openai.OpenAIMessages(system_openai_api_key())
+    messages = openai.OpenAIMessages(system_openai_api_key(), openai.Model.GPT_35_TURBO)
 
     messages.add_message(
         openai.OpenAIMessage(
