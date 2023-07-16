@@ -1,8 +1,8 @@
-import libs.env as env
+from libs.env import system_openai_api_key
 import libs.wopenai as openai
 
 async def chat(prompt: str) -> openai.OpenAIResponse:
-    messages = openai.OpenAIMessages(env.get_system_openai_api_key())
+    messages = openai.OpenAIMessages(system_openai_api_key())
 
     messages.add_message(
         openai.OpenAIMessage(

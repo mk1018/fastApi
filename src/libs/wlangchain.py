@@ -1,4 +1,4 @@
-import lang_chain
+import langchain
 
 class LangChain():
     def __init__():
