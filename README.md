@@ -15,3 +15,6 @@ cp .env.example .env
 ```
 make build && make up
 ```
+
+### テスト
+make test
