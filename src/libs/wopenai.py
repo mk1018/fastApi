@@ -52,6 +52,11 @@ class OpenAIMessages():
     def add_message(self, message: OpenAIMessage) -> 'OpenAIMessages':
         self._messages.append(message)
         return self
+    
+    def add_messages(self, messages: list[OpenAIMessage]) -> 'OpenAIMessages':
+        for message in messages:
+            self.add_message(message)
+        return self
 
     def to_dict(self) -> list[dict[str, str]]:
         return [msg.message() for msg in self._messages]
