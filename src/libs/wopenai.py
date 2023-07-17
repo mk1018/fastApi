@@ -20,6 +20,7 @@ class Model(Enum):
 class Role(Enum):
     SYSTEM = "system"
     USER = "user"
+    ASSISTANT = 'assistant'
 
 class OpenAIMessage():
     role: Role
@@ -45,7 +46,7 @@ class OpenAIMessages():
     def api_key(self) -> str:
         return self._api_key
     
-    def model(self) -> str:
+    def model_value(self) -> str:
         return self._model.value
 
     def add_message(self, message: OpenAIMessage) -> None:
@@ -53,6 +54,9 @@ class OpenAIMessages():
 
     def to_dict(self) -> list[dict[str, str]]:
         return [msg.message() for msg in self._messages]
+    
+    async def asend(self, stream: bool=True):
+        return await _asend(self, stream)
 
 class OpenAIResponse():
     _response: list[Any]
@@ -64,10 +68,10 @@ class OpenAIResponse():
         async for chunk in self._response:
             yield json.dumps(chunk)
     
-async def asend(messages: OpenAIMessages, stream: bool=True) -> OpenAIResponse:
+async def _asend(messages: OpenAIMessages, stream: bool=True) -> OpenAIResponse:
     response = await openai.ChatCompletion.acreate(
         api_key=messages.api_key(),
-        model=messages.model(),
+        model=messages.model_value(),
         messages=messages.to_dict(),
         stream=stream,
         top_p=HYPER_PARAMETERS['top_p'],
