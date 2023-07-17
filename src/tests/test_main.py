@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app.db import get_db, Base
 from app.main import app, async_db_url
+from tests.__test import set_run_test
 
 @pytest_asyncio.fixture
 async def async_client() -> AsyncClient:
@@ -38,6 +39,7 @@ async def async_client() -> AsyncClient:
     await client.aclose()
     await async_engine.dispose()  # DB engine を明示的に閉じる
 
+@set_run_test
 @pytest.mark.asyncio
 async def test_create_and_read(async_client):
     response = await async_client.post("/tasks", json={"title": "テストタスク"})
@@ -52,6 +54,7 @@ async def test_create_and_read(async_client):
     assert response_obj[0]["title"] == "テストタスク"
     assert response_obj[0]["done"] is False
     
+@set_run_test
 @pytest.mark.asyncio
 async def test_done_flag(async_client):
     response = await async_client.post("/tasks", json={"title": "テストタスク2"})

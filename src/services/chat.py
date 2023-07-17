@@ -1,10 +1,10 @@
 from app.db import DbAsyncSession
-from libs.env import system_openai_api_key
+from libs.key import openai_api_key
 import libs.wopenai as wopenai
 
 async def chat(prompt: str, db: DbAsyncSession) -> wopenai.OpenAIResponse:
     messages = wopenai.OpenAIMessages(
-        system_openai_api_key(), 
+        openai_api_key(), 
         wopenai.Model.GPT_35_TURBO
     )
 

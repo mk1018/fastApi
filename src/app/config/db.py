@@ -1,14 +1,9 @@
-import os
+import libs.env as env
 
-MYSQL_DATABASE=os.getenv('MYSQL_DATABASE')
-MYSQL_USER=os.getenv('MYSQL_USER')
-MYSQL_PASSWORD=os.getenv('MYSQL_PASSWORD')
-
-DB_URL = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@mysql:3306/{MYSQL_DATABASE}?charset=utf8"
-ASYNC_DB_URL = f"mysql+aiomysql://{MYSQL_USER}:{MYSQL_PASSWORD}@mysql:3306/{MYSQL_DATABASE}?charset=utf8"
+DB_CONNECT_INFO = f"{env.mysql_user()}:{env.mysql_password()}@{env.mysql_host()}:{env.mysql_port()}/{env.mysql_database()}?charset=utf8"
 
 def sync_db_usl() -> str:
-    return DB_URL
+    return f"mysql+pymysql://{DB_CONNECT_INFO}"
 
 def async_db_url() -> str:
-    return ASYNC_DB_URL
+    return f"mysql+aiomysql://{DB_CONNECT_INFO}"
