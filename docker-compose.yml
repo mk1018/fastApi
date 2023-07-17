@@ -3,7 +3,9 @@ version: '3'
 services:
   python:
     container_name: python
-    build: ./src
+    build:
+      context: ./src
+      dockerfile: Dockerfile.local
     working_dir: /opt/src
     tty: true
     volumes:
