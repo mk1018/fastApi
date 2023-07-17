@@ -38,7 +38,7 @@ class OpenAIMessages():
     _model: Model
     _api_key: str
 
-    def __init__(self, api_key: str, model: Model):
+    def __init__(self, api_key: str, model: Model) -> None:
         self._messages = []
         self._model = model
         self._api_key = api_key
@@ -56,10 +56,10 @@ class OpenAIMessages():
     def to_dict(self) -> list[dict[str, str]]:
         return [msg.message() for msg in self._messages]
     
-    def send(self, stream: bool=True):
+    def send(self, stream: bool=True) -> 'OpenAIResponse':
         return _send(self, stream)
     
-    async def asend(self, stream: bool=True):
+    async def asend(self, stream: bool=True) -> 'OpenAIResponse':
         return await _asend(self, stream)
 
 class OpenAIResponse():
