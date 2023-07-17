@@ -1,6 +1,6 @@
 import os
 """ test """
-def run_test() -> bool:
+def is_run_test() -> bool:
     return True if os.getenv("RUN_TEST") == "True" else False
 
 """ api key """
